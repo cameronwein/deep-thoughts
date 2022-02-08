@@ -15,7 +15,17 @@ import SingleThought from './pages/SingleThought';
 import Profile from './pages/Profile';
 import Signup from './pages/Signup';
 
+
 const client = new ApolloClient({
+  request: operation => {
+    const token = localStorage.getItem('id_token');
+
+    operation.setContext({
+      headers: {
+        authorization: token ? `Bearer ${token}` : ''
+      }
+    });
+  },
   uri: '/graphql'
 });
 
@@ -31,6 +41,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile/:username" element={<Profile />} />
+              <Route path="/profile/" element={<Profile />} />
               <Route path="/thought/:id" element={<SingleThought />} />
 
               <Route path="*" element={<NoMatch />} />
